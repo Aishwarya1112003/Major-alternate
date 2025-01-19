@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><b style="color: #06C167;">SustainBite</b></div>
+        <div class="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="home.html" >Home</a></li>
+                <li><a href="#about" class="active" >About</a></li>
+                <li><a href="contact.html" >Contact</a></li>
+                <li><a href="profile.php" >Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    <script>
+        hamburger=document.querySelector(".hamburger");
+        hamburger.onclick =function(){
+            navBar=document.querySelector(".nav-bar");
+            navBar.classList.toggle("active");
+        }
+    </script>
+     
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+      
+     
+    /* Fade-in effect */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* General text style */
+    .sparkle-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 50px;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 100px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: black; /* "Welcome to" will be black */
+        animation: fadeIn 2s ease-in-out;
+    }
+
+    .food {
+        font-size: 56px;
+        background: linear-gradient(135deg, #06C167, #000000);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .donate {
+        font-size: 56px;
+        background: linear-gradient(135deg, #06C167, #000000);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    
+    
+        .coverc{
+          width: 100%;
+          height: 400px;
+          background:url('img/about3.jpg')no-repeat;
+    background-size: cover;
+    display: grid;
+    place-items:center;
+    padding-top: 8rem;
+ 
+        } 
+        .title{
+          font-size: 38px;
+          text-align: center;
+          align-items: center; 
+        }
+       
+        .para p{
+            font-size: 23px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+          @media (max-width: 767px) {
+            .para p{
+               font-size: 16px;
+               /* margin-left: 10px; */
+              }
+            #pptslide{
+                height: 200px;
+                width: 300px;
+
+            }
+            #map{
+              height: 200px;
+                width: 300px;
+
+
+            }
+            #overview{
+              height: 200px;
+                width: 300px;
+            }
+            
+        .title{
+          font-size: 28px;
+          margin: 10px;
+          text-align: center;
+          align-items: center; 
+        }
+       
+
+          }
+     
+    </style>
+    <br>
+    <br>
+    <!-- <section class="coverc">
+        
+    
+    </section> -->
+
+   
+    <p class="sparkle-text">Welcome to <span class="food"></span> <span class="donate">SustainBite</span></p>
+
+    <br>
+    <br>
+    <br>
+        <p class="heading">About us</p>
+        <!-- <p  style=" font-size:30px ; text-align: center;" > ABOUT <span>US</span> </p> -->
+      
+        <!-- <br> -->
+      <div class="para">
+        <!-- <p>"Welcome to Food Donate, India's largest and most trusted donating platform that connects donors to verified nonprofits. FoodDonate helps you become a ray of hope for people in need. Choose a cause that is close to your heart and join hands with millions of donors like you who aim to make this world a better place."</p> -->
+      
+        <p> At SustainBite, we believe in making a difference by providing a simple yet impactful way for individuals and organizations to share their surplus food with those in need. Our mission is to reduce food waste while helping those who are less fortunate by providing them with nutritious meals.</p>
+      </br>
+        <p>We connect donors—whether they are individuals, restaurants, or food establishments—with recipients, including shelters, food banks, and people in need. Through our easy-to-use platform, you can donate food quickly and efficiently, knowing it will reach those who need it the most.</p>
+
+    </br>
+    <p class="heading">Our Vision</p>
+    <p>Our vision is to create a world where food waste is minimized, and no one goes to bed hungry. We aim to create a sustainable food-sharing community that works together to provide meals to those in need, without contributing to further waste. By joining us, you're not only helping reduce food wastage but also making a lasting impact on communities everywhere.</p>
+       
+    
+
+      </div>
+      <br>
+ 
+      
+    
+      <br>
+      
+
+
+<div class="map"  style="  text-align: center; padding-bottom: 50px;" >
+<p  style=" font-size:30px ;" > Location  </p>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.4638469728866!2d72.8284733741672!3d19.087296651619855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9a2f9af6e97%3A0x416fa98490ee02a5!2sSNDT%20Women&#39;s%20University!5e0!3m2!1sen!2sin!4v1726509489068!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+     </div>
+
+
+     <!-- <p class="heading"> Our Story</p>
+     <div class="para">
+       <p>Our journey began with a realization that food waste is a significant problem in India. According to a report by the United Nations, India is the world's second-largest food producer, yet it also has one of the highest rates of food waste. This waste has a significant impact on the environment, as well as on food security in the country.</p>
+     </div> -->
+     <!-- <div class="overview"  style="  text-align: center; padding-bottom: 50px;" >
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=1400 height=800 src="https://edrawcloudpublicus.s3.amazonaws.com/viewer/self/3094230/share/2023-3-2/1677763924/main.svg" id="overview"></iframe>
+     </div> -->
+
+
+     <footer>
+      <p>&copy; 2024 SustainBite| All Rights Reserved</p>
+  </footer>
+</body>
+</html>

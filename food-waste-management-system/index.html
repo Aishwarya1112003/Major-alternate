@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Donate</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Left column */
+        .left-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Center content horizontally */
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .logo b {
+            color: white; /* Donate text is white */
+        }
+
+        .para {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .log {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the buttons vertically */
+            width: 100%; /* Make the container take full width */
+        }
+
+        .log a {
+            display: inline-block;
+            margin: 15px 0;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            padding: 12px 20px;
+            background-color: #06C167;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            width: 200px; /* Set a fixed width for the buttons */
+        }
+
+        .log a:hover {
+            background-color: #049e53;
+        }
+
+        .fa-moped {
+            margin-right: 10px;
+        }
+
+        /* Right column */
+        .right-column {
+            flex: 1;
+            background-color: #06C167; /* Same green color as "Donate" */
+        }
+
+        .log a {
+    display: inline-block;
+    margin: 15px 0;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    background-color: #06C167;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Add transform to transition */
+    width: 200px; /* Set a fixed width for the buttons */
+}
+
+.log a:hover {
+    background-color: #049e53;
+    transform: scale(1.1); /* Zoom-in effect */
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left column -->
+        <div class="left-column">
+            
+            <p class="para" style="font-size: 24px; font-weight: bold;">Login as</p>
+
+            <div class="log">
+                <a href="signup.php">Donor</a>
+                <a href="admin/signup.php">Admin</a>
+                <a href="delivery/deliverysignup.php" id="delivery">
+                    <i class="fa-regular fa-moped"></i>Recipient
+                </a>
+            </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="right-column">
+            <!-- This column is the green side -->
+            <p class="logo" style="text-align: center; margin-top: 150px;">
+                Welcome to <br> 
+                <span style="font-size: 48px; color: white;">SustainBite</span>
+            </p>
+            
+
+           
+
+
+        </div>
+    </div>
+</body>
+</html>
