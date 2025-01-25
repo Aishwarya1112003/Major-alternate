@@ -1,7 +1,7 @@
 
 <?php
 ob_start();
-session_start(); // Make sure the session is started
+// session_start(); // Make sure the session is started
 include("connect.php"); 
 
 // Check if the admin is logged in
@@ -9,6 +9,8 @@ if ($_SESSION['name'] == '') {
     header("location:signin.php");
     exit();
 }
+
+// session_start();
 
 // Fetch admin details from session
 $admin_email = $_SESSION['email'];  // Email is stored in session
@@ -212,7 +214,7 @@ if (isset($_POST['food'])) {
     
     // Update query to assign the donation and set status to 'active'
     $update_query = "UPDATE food_donations 
-                     SET status = 'active', assigned_to = $admin_id 
+                     SET status = 'active', assigned_to = $admin_id, donation_status = 'Accepted by NGO'
                      WHERE Fid = $order_id";
     
     $update_result = mysqli_query($connection, $update_query);
@@ -251,6 +253,7 @@ if (isset($_POST['food'])) {
             <th>address</th>
             <th>Quantity</th>
             <th>ExpiryDate</th>
+            <th>Donation Status</th>
             <!-- <th>Action</th> -->
          
           
@@ -260,7 +263,7 @@ if (isset($_POST['food'])) {
        <tbody>
 
         <?php foreach ($data as $row) { ?>
-        <?php    echo "<tr><td data-label=\"name\">".$row['name']."</td><td data-label=\"food\">".$row['food']."</td><td data-label=\"category\">".$row['category']."</td><td data-label=\"phoneno\">".$row['phoneno']."</td><td data-label=\"date\">".$row['date']."</td><td data-label=\"Address\">".$row['address']."</td><td data-label=\"quantity\">".$row['quantity']."</td><td data-label=\"expirydate\">".$row['expiry']."</td>";
+        <?php    echo "<tr><td data-label=\"name\">".$row['name']."</td><td data-label=\"food\">".$row['food']."</td><td data-label=\"category\">".$row['category']."</td><td data-label=\"phoneno\">".$row['phoneno']."</td><td data-label=\"date\">".$row['date']."</td><td data-label=\"Address\">".$row['address']."</td><td data-label=\"quantity\">".$row['quantity']."</td><td data-label=\"expirydate\">".$row['expiry']."<td data-label=\"donation status\">".$row['donation_status']."</td>";
 ?>
         
             <!-- <td><?= $row['Fid'] ?></td>
@@ -281,10 +284,23 @@ if (isset($_POST['food'])) {
                     </form>
                 <?php } else if ($row['assigned_to'] == $id && $row['status'] == 'active') { ?>
                     Order assigned to you
+                    <!-- <form method="POST" action="update_status.php">
+                        <input type="hidden" name="fid" value="<?php echo $row['fid']; ?>">
+                        <select name="donation_status">
+                            <option value="Pending" <?php if($row['donation_status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+                            <option value="Assigned to NGO" <?php if($row['donation_status'] == 'Assigned to NGO') echo 'selected'; ?>>Assigned to NGO</option>
+                            <option value="Pickup Scheduled" <?php if($row['donation_status'] == 'Pickup Scheduled') echo 'selected'; ?>>Pickup Scheduled</option>
+                            <option value="Picked Up" <?php if($row['donation_status'] == 'Picked Up') echo 'selected'; ?>>Picked Up</option>
+                            <option value="Delivered to Needy" <?php if($row['donation_status'] == 'Delivered to Needy') echo 'selected'; ?>>Delivered to Needy</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form> -->
                     <form method="get" action="map_view.php" style="display:inline;">
-                        <input type="hidden" name="donation_address" value="<?= urlencode($row['address']) ?>">
-                        <input type="hidden" name="delivery_address" value="<?= urlencode($delivery_address) ?>"> <!-- Replace $delivery_address with correct session/variable -->
-                        <button type="submit">Map</button>
+                    <input type="hidden" name="donation_address" value="<?= urlencode($row['address']) ?>">
+                    <input type="hidden" name="delivery_address" value="<?= urlencode($delivery_address) ?>"> <!-- Replace $delivery_address with correct session/variable -->
+                    <input type="hidden" name="order_id" value="<?= $row['Fid'] ?>">
+                    <button type="submit" id="mapButton_<?php echo $row['Fid']; ?>">Map</button>
+</form>
         </form>
                 <?php } else { ?>
                     Order assigned to another delivery person

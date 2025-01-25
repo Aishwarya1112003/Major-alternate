@@ -22,7 +22,7 @@ body{
 .profilebox{
     padding-top: 8rem;
    text-align: center;    
-    width: 700px;
+    width: 1200px;
     height: 900px;
     margin: 20px auto ;
     
@@ -43,26 +43,28 @@ body{
     padding: 10px;
 }
 .table-container{
-    padding: 0 ;
-    margin: 20px auto 10px;
-    /* border: 1px solid ; */
-    box-shadow: ;
-    /* border-radius: 10px; */
+    width: 100vw; /* Full screen width */
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* No horizontal scroll */
 }
 
 .table{
     width: 100%;
 
-    border-collapse:separate;
-    border-spacing: 0px;
+    border-collapse:collapse;
+    font-size: 18px;  /* Increase font size for better visibility */
+    /* border-spacing: 0px; */
     
 
 
 }
 th{
-    position:sticky;
-    top:0px;
+    /* position:sticky; */
+    /* top:0; */
     background-color: #37db8c;
+    font-size: 20px;
     /* background-color: rgb(240, 242, 246) */
 
 
@@ -70,11 +72,14 @@ th{
 }
 th,td{
     /* border: 1px solid #12121385; */
+    border-bottom: 2px solid black;  /* Add black line after every row */
+    padding: 15px;  /* Adjust padding for better spacing */
+    text-align: center;
 
 }
 .table-wrapper{
-    max-height: 130px;
-    overflow-y: scroll;
+    max-height: none;
+    overflow-y: visible;
 
 }
 .table thead tr th{
@@ -104,7 +109,7 @@ th,td{
         height: auto;
       }
     .profilebox{
-        width: 350px;
+        width: 1200px;
         font-size: 14px;
         height: 600px;
         border-radius: 30px ;
@@ -119,6 +124,43 @@ th,td{
         padding: 5px;
     }
 }
+
+
+/* Dark Yellow for Pending */
+.Pending {
+    /* background-color: #FFD700; Dark yellow */
+    color: #FFD700;
+}
+
+/* Dark Green for Assigned to NGO */
+.assigned {
+    /* background-color: #006400; Dark green */
+    color:  #006400;
+}
+
+/* Red for Canceled */
+.canceled {
+    /* background-color: #B22222; Red */
+    color: #B22222;
+}
+
+/* Dark Blue for Pickup */
+.pickup {
+    /* background-color: #00008B; Dark blue */
+    color: #00008B;
+}
+
+/* Purple for Delivered */
+.Delivered {
+    /* background-color: #800080; Purple */
+    color: #800080;
+}
+
+/* Default background (optional, for other statuses) */
+/* .default {
+    background-color: #f4f4f4; /* Light grey */
+    /* color: black; */
+/* } */
 
 
 .headingline{

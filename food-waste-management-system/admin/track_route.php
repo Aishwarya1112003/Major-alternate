@@ -1,133 +1,123 @@
 <?php
-$origin = isset($_GET['origin']) ? urldecode($_GET['origin']) : '';
+require_once('api_config.php'); // Include the API key configuration
+
+// Retrieve destination from the GET parameters
 $destination = isset($_GET['destination']) ? urldecode($_GET['destination']) : '';
+
+if (!$destination) {
+    die("Destination is required.");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Step-by-Step Navigation</title>
+    <title>Real-Time Tracking</title>
     <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm01PKDHEWuNKixfTgIRsVaQYLZCLAJWM&callback=initMap&libraries=geometry">
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap">
     </script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+        }
         #map {
             height: 500px;
-            width: 100%;
+            width: 70%;
         }
-
-        #info, #turn-by-turn {
-            margin-top: 20px;
-            font-size: 16px;
+        #info-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
         }
-
-        #start-btn {
-            margin: 20px 0;
-            padding: 10px 20px;
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
+        #info, #directions-panel {
+            font-size: 14px;
+            margin-bottom: 20px;
         }
-
-        #start-btn:hover {
-            background-color: darkgreen;
+        #directions-panel {
+            height: 500px;
+            overflow: auto;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            background: #f9f9f9;
         }
     </style>
     <script>
-        let map, directionsService, directionsRenderer, watchID;
-        let originMarker, destinationMarker, currentLocationMarker;
-        let stepIndex = 0, routeSteps = [];
+        let map, marker, directionsService, directionsRenderer;
+        let currentPos;
 
         function initMap() {
-            const origin = <?php echo json_encode($origin); ?>;
-            const destination = <?php echo json_encode($destination); ?>;
-
-            if (!origin || !destination) {
-                alert("Both origin and destination are required.");
-                return;
-            }
-
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 12,
-                center: { lat: 19.0760, lng: 72.8777 }, // Default center (Mumbai)
+                center: { lat: 19.0760, lng: 72.8777 }, // Default center
             });
+
+            // Enable traffic layer
+            const trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
 
             directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                draggable: false,
+                panel: document.getElementById("directions-panel"),
+            });
+
             directionsRenderer.setMap(map);
 
-            document.getElementById("start-btn").addEventListener("click", () => {
-                startStepByStepNavigation(origin, destination);
-            });
-
-            // Place origin and destination markers
-            placeMarkers(origin, destination);
+            const destination = <?php echo json_encode($destination); ?>;
+            trackLocation(destination);
         }
 
-        function placeMarkers(origin, destination) {
-            const geocoder = new google.maps.Geocoder();
-
-            // Geocode and place origin marker
-            geocoder.geocode({ address: origin }, (results, status) => {
-                if (status === "OK") {
-                    originMarker = new google.maps.Marker({
-                        position: results[0].geometry.location,
-                        map: map,
-                        label: "O",
-                        title: "Origin",
-                    });
-                } else {
-                    alert("Geocoding origin failed: " + status);
-                }
-            });
-
-            // Geocode and place destination marker
-            geocoder.geocode({ address: destination }, (results, status) => {
-                if (status === "OK") {
-                    destinationMarker = new google.maps.Marker({
-                        position: results[0].geometry.location,
-                        map: map,
-                        label: "D",
-                        title: "Destination",
-                    });
-                } else {
-                    alert("Geocoding destination failed: " + status);
-                }
-            });
-        }
-
-        function startStepByStepNavigation(origin, destination) {
+        function trackLocation(destination) {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
+                navigator.geolocation.watchPosition(
                     (position) => {
-                        const currentLatLng = {
+                        currentPos = {
                             lat: position.coords.latitude,
-                            lng: position.coords.longitude,
+                            lng: position.coords.longitude
                         };
 
-                        if (!currentLocationMarker) {
-                            currentLocationMarker = new google.maps.Marker({
-                                position: currentLatLng,
+                        if (!marker) {
+                            marker = new google.maps.Marker({
+                                position: currentPos,
                                 map: map,
-                                icon: "https://maps.google.com/mapfiles/ms/icons/man.png",
-                                title: "Your Current Location",
+                                title: "Your Location",
+                                icon: {
+                                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                                }
                             });
+                        } else {
+                            marker.setPosition(currentPos);
                         }
 
-                        calculateRoute(currentLatLng, destination);
+                        map.setCenter(currentPos);
+
+                        // Request route to the destination
+                        calculateAndDisplayRoute(currentPos, destination);
                     },
                     (error) => {
-                        alert("Error fetching location: " + error.message);
+                        console.error("Error getting location: ", error);
                     },
-                    { enableHighAccuracy: true }
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0
+                    }
                 );
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
         }
 
-        function calculateRoute(origin, destination) {
+        function calculateAndDisplayRoute(origin, destination) {
             directionsService.route(
                 {
                     origin: origin,
@@ -138,81 +128,34 @@ $destination = isset($_GET['destination']) ? urldecode($_GET['destination']) : '
                     if (status === google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(response);
 
-                        // Extract steps
-                        routeSteps = response.routes[0].legs[0].steps;
-                        displayCurrentStep();
+                        const route = response.routes[0].legs[0];
+                        const travelTime = route.duration.text;
+                        const distance = route.distance.text;
 
-                        // Start live tracking
-                        startLiveTracking();
+                        document.getElementById("info").innerHTML = `
+                            <p><strong>Origin:</strong> ${origin.lat}, ${origin.lng}</p>
+                            <p><strong>Destination:</strong> ${destination}</p>
+                            <p><strong>Total Distance:</strong> ${distance}</p>
+                            <p><strong>Total Time:</strong> ${travelTime}</p>
+                        `;
                     } else {
-                        alert("Directions request failed: " + status);
+                        console.error("Directions request failed: " + status);
                     }
                 }
             );
         }
 
-        function displayCurrentStep() {
-            if (stepIndex < routeSteps.length) {
-                const step = routeSteps[stepIndex];
-                document.getElementById("turn-by-turn").innerHTML = `
-                    <p><strong>Next Turn:</strong> ${step.instructions}</p>
-                    <p><strong>Distance:</strong> ${step.distance.text}</p>
-                    <p><strong>Duration:</strong> ${step.duration.text}</p>
-                `;
-            } else {
-                document.getElementById("turn-by-turn").innerHTML = `
-                    <p><strong>Navigation Complete!</strong> You have reached your destination.</p>
-                `;
-                stopLiveTracking();
-            }
-        }
-
-        function startLiveTracking() {
-            watchID = navigator.geolocation.watchPosition(
-                (position) => {
-                    const currentLatLng = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-
-                    currentLocationMarker.setPosition(currentLatLng);
-                    map.setCenter(currentLatLng);
-
-                    // Check proximity to the next step
-                    const step = routeSteps[stepIndex];
-                    const stepLatLng = step.end_location;
-
-                    const distanceToStep = google.maps.geometry.spherical.computeDistanceBetween(
-                        new google.maps.LatLng(currentLatLng),
-                        new google.maps.LatLng(stepLatLng)
-                    );
-
-                    if (distanceToStep < 50) { // Move to the next step if close enough
-                        stepIndex++;
-                        displayCurrentStep();
-                    }
-                },
-                (error) => {
-                    alert("Error tracking location: " + error.message);
-                },
-                { enableHighAccuracy: true }
-            );
-        }
-
-        function stopLiveTracking() {
-            if (watchID) {
-                navigator.geolocation.clearWatch(watchID);
-            }
-        }
-
-        // Ensure initMap is globally accessible
         window.initMap = initMap;
     </script>
 </head>
 <body>
-    <h1>Step-by-Step Navigation</h1>
-    <button id="start-btn">Start Journey</button>
-    <div id="turn-by-turn"></div>
-    <div id="map"></div>
+    <h1>Real-Time Tracking with Traffic</h1>
+    <div id="container">
+        <div id="map"></div>
+        <div id="info-panel">
+            <div id="info"></div>
+            <div id="directions-panel"></div>
+        </div>
+    </div>
 </body>
 </html>
